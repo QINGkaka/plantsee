@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>植物识别</title>
+</head>
+<body>
+    <h1>植物识别</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" required>
+        <button type="submit">上传并识别</button>
+    </form>
+    <p id="loading" style="display:none;color:blue;">识别中，请稍等...</p>
+    <pre id="result"></pre>
+    <script>
+        document.getElementById('upload-form').onsubmit = async function(e) {
+            e.preventDefault();
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').textContent = '';
+            const formData = new FormData(this);
+            try {
+                const res = await fetch('/api/identify', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+            } catch (err) {
+                document.getElementById('result').textContent = '识别失败，请重试。';
+            }
+            document.getElementById('loading').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

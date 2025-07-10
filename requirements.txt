@@ -1,0 +1,4 @@
+opencv-python>=4.4
+pillow
+khandy>=0.1.8
+onnxruntime
